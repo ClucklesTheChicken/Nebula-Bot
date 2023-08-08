@@ -6,6 +6,7 @@ const fs = require("fs");
 var path = require('path');
 const JSONpath = path.resolve( __dirname, "./quotes.json" );
 const commandsFolder = path.resolve( __dirname, "./commands" );
+const generateImage = require("./generateImage.js");
 
 
 const client = new Client({
@@ -63,6 +64,21 @@ client.on('interactionCreate', async interaction => {
     else{
       return;
     }
+});
+
+client.on('guildMemberAdd', member => {
+  const channel = member.guild.channels.cache.find(channel => channel.name === 'welcome'); // Replace 'welcome' with the actual channel name
+
+  if (!channel) return;
+
+  channel.send(`Welcome to the server, ${member.user.username}!`);
+
+  const WelcomeChannelID = "1048208363244232725";
+        const img = generateImage(member);
+        member.guild.channels.cache.get(WelcomeChannelID).send({
+            content: `<@${member.id}>`+' Welcome to the server!',
+            files: [img]
+  })
 });
 
 
