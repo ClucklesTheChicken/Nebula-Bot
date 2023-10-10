@@ -42,31 +42,11 @@ for (const file of slashFiles) {
   commandCount++;
 }
 
-// Clear existing slash commands
+// Deploy slash commands (only once)
 const rest = new REST({ version: "9" }).setToken(process.env.TOKEN)
-console.log("Clearing existing slash commands...")
-
-// Fetch and delete existing commands
-rest.get(Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID))
-  .then((existingCommands) => {
-    const deletePromises = existingCommands.map((command) =>
-      rest.delete(
-        Routes.applicationGuildCommand(CLIENT_ID, GUILD_ID, command.id)
-      )
-    );
-
-    return Promise.all(deletePromises);
-  })
-  .then(() => {
-    console.log("Deploying slash commands...");
-    const commands = [...client.slashcommands.values()].map(
-      (command) => command.data.toJSON()
-    );
-    return rest.put(
-      Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID),
-      { body: commands }
-    ); // Deploy new commands
-  })
+const commands = [...client.slashcommands.values()].map(command => command.data.toJSON());
+console.log("Deploying slash commands...")
+rest.put(Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID), { body: commands })
   .then(() => {
     console.log(`${commandCount} commands loaded`);
     goTime();
