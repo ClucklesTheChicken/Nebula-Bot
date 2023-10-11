@@ -23,7 +23,7 @@ module.exports = {
           // Check has queue
           const queue = useQueue(guild.id);
           if (!queue) {
-            interaction.reply({ content: `${ emojis.error } ${ member }, queue is currently empty. You should totally \`/play\` something - but that's just my opinion.` });
+            interaction.reply({ content: `${ member }, queue is currently empty. You should totally \`/play\` something - but that's just my opinion.` });
             return;
           }
           queueEmbedResponse(interaction, queue);
