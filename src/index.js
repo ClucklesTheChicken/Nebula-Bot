@@ -197,7 +197,7 @@ client.on('messageCreate', async (message) => {
       );
 
       // Create an attachment from the local image file
-      const attachment = new AttachmentBuilder(`${mayaFolder}\\${activeMayaName}.png`, { name: 'maya.png' });
+      const attachment = new AttachmentBuilder(`${mayaFolder}/${activeMayaName}.png`, { name: 'maya.png' });
 
       // Set the image in the embed to the attachment
       embed.setImage('attachment://maya.png');
