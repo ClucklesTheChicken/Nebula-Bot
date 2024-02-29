@@ -80,9 +80,12 @@ rest.put(Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID), { body: commands 
   });
 
 function goTime() {
-  client.on("ready", (c) => {
+  client.on("ready", async (c) => {
     console.log(`${c.user.username} is online and ready for BITCHES.`);
-    spawnMayas();
+    const connection = await mysql.createConnection(dbConfig);
+    const [rows] = await connection.execute('SELECT * FROM achievements');
+    await connection.end();
+    //spawnMayas();
   })
 
   client.on("interactionCreate", (interaction) => {
