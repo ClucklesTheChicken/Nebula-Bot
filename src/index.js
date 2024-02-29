@@ -136,7 +136,7 @@ function spawnMayas() {
       '#FF5733'
     );
     // Create an attachment from the local image file
-    let attachment = new AttachmentBuilder(`${mayaFolder}\\${selectedMaya.name}.png`, { name: 'maya.png' });
+    let attachment = new AttachmentBuilder(`${mayaFolder}/${selectedMaya.name}.png`, { name: 'maya.png' });
     embed.setImage('attachment://maya.png');
 
     if(activeMayaMessage){
