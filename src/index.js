@@ -84,6 +84,9 @@ function goTime() {
     console.log(`${c.user.username} is online and ready for BITCHES.`);
     const connection = await mysql.createConnection(dbConfig);
     const [rows] = await connection.execute('SELECT * FROM achievements');
+    if (rows.length !== 0) {
+      console.log(rows[0].inventory);
+    }
     await connection.end();
     //spawnMayas();
   })
