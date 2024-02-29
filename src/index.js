@@ -82,7 +82,7 @@ rest.put(Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID), { body: commands 
 function goTime() {
   client.on("ready", (c) => {
     console.log(`${c.user.username} is online and ready for BITCHES.`);
-    //spawnMayas();
+    spawnMayas();
   })
 
   client.on("interactionCreate", (interaction) => {
@@ -159,7 +159,7 @@ function spawnMayas() {
 
     spawnMayas(); // Schedule the next Maya spawn
   //}, interval * 60000); // Convert minutes to milliseconds
-  }, 10000);
+  }, 20000);
 }
 
 client.on('messageCreate', async (message) => {
