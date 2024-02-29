@@ -1,0 +1,73 @@
+{
+  "count": {
+    "firstcatch": {
+      "description": "Caught their first Maya!",
+      "requirement": 1
+    },
+    "nice": {
+      "description": "Caught 69 Mayas! Nice",
+      "requirement": 69
+    },
+    "catch100": {
+      "description": "Caught 100 Mayas! Well done!",
+      "requirement": 100
+    },
+    "nolife": {
+      "description": "Caught 1000 Mayas! I don't know how you managed this.",
+      "requirement": 1000
+    }
+  },
+
+  "first": {
+    "catchrarest": {
+      "description": "Caught the elusive SHINY PUPPY MAYA! CONGO-RATS",
+      "requirement": "shinypuppy"
+    },
+    "catchshiny": {
+      "description": "Caught their first shiny! CONGO-RATS",
+      "requirement": "shiny"
+    },
+    "firstgiftsent": {
+      "description": "Sent their first gift! Aren't you generous!"
+    },
+    "firstgiftreceived": {
+      "description": "Received their first gift!"
+    },
+    "getjuked": {
+      "description": "GOT JUKED. You caught a FAKE Maya. But here is an achievement to make you feel better",
+      "requirement": "juke"
+    },
+    "inventory": {
+      "description": "Viewed their inventory for the first time. Nice. You pushed some buttons"
+    },
+    "achievements": {
+      "description": "Viewed their achievements for the first time. Here's an achievement I guess"
+    },
+    "worshipper": {
+      "description": "Used some emojis in their message that would make it seem that you worship Maya. Idk what to say. Cool?"
+    },
+    "notquite": {
+      "description": "Said cat. Why"
+    },
+    "smack": {
+      "description": "Used the SMACK command for the first time. NICE. GETTEM"
+    },
+    "quote": {
+      "description": "Used the quote command for the first time."
+    },
+    "mayadonator": {
+      "description": "Donated a Maya for the first time!"
+    },
+    "polite": {
+      "description": "Used the hey command for the first time! Everyone always asks WHERE'S NEBULA BOT... Never how's Nebula bot :("
+    }
+  },
+  "misc": {
+    "catchall": {
+      "description": "Caught every type of Maya! HECTIC."
+    },
+    "R I C H": {
+      "description": "Donated 5 ultimate Mayas to the bot! THENKS"
+    }
+  }
+}

@@ -1,0 +1,244 @@
+{
+    "good": {
+      "description": "Good Maya",
+      "catchChance": 0.5
+    },
+    "sleepy": {
+      "description": "Sleepy Maya",
+      "catchChance": 0.45
+    },
+    "excite": {
+      "description": "Excite Maya",
+      "catchChance": 0.4
+    },
+    "happy": {
+      "description": "Happy Maya",
+      "catchChance": 0.4
+    },
+    "brave": {
+      "description": "Brave Maya",
+      "catchChance": 0.35
+    },
+    "sus": {
+      "description": "Sus Maya",
+      "catchChance": 0.3
+    },
+    "butwhy": {
+      "description": "But Why Maya",
+      "catchChance": 0.3
+    },
+    "epic": {
+      "description": "Epic Maya",
+      "catchChance": 0.25
+    },
+    "rickroll": {
+      "description": "Rick Roll Maya",
+      "catchChance": 0.2
+    },
+    "not": {
+      "description": "Not Maya",
+      "catchChance": 0.2
+    },
+    "stronk": {
+      "description": "Stronk Maya",
+      "catchChance": 0.15
+    },
+    "reverse": {
+      "description": "Reverse Maya",
+      "catchChance": 0.1
+    },
+    "headpat": {
+      "description": "Head Pat Maya",
+      "catchChance": 0.09
+    },
+    "selfie": {
+      "description": "Selfie Maya",
+      "catchChance": 0.08
+    },
+    "concern": {
+      "description": "Concern Maya",
+      "catchChance": 0.07
+    },
+    "legendary": {
+      "description": "Legendary Maya",
+      "catchChance": 0.05
+    },
+    "mythic": {
+      "description": "Mythic Maya",
+      "catchChance": 0.04
+    },
+    "8bit": {
+      "description": "8bit Maya",
+      "catchChance": 0.03
+    },
+    "cursed": {
+      "description": "Cursed Maya",
+      "catchChance": 0.02
+    },
+    "bad": {
+      "description": "Bad to the BONE Maya",
+      "catchChance": 0.02
+    },
+    "divine": {
+      "description": "Divine Maya",
+      "catchChance": 0.01
+    },
+    "ultimate": {
+      "description": "Ultimate Maya",
+      "catchChance": 0.005
+    },
+    "milk": {
+      "description": "Milk box Maya",
+      "catchChance": 0.003
+    },
+    "guitar": {
+      "description": "Pro guitar player Maya",
+      "catchChance": 0.002
+    },
+    "blanky": {
+      "description": "Blanky Maya",
+      "catchChance": 0.001
+    },
+    "puppy": {
+      "description": "Puppy Maya",
+      "catchChance": 0.0008
+    },
+    "shinygood": {
+      "description": "Shiny Good Maya",
+      "catchChance": 0.0007
+    },
+    "shinysleepy": {
+      "description": "Shiny Sleepy Maya",
+      "catchChance": 0.0007
+    },
+    "shinyexcite": {
+      "description": "Shiny Excite Maya",
+      "catchChance": 0.0007
+    },
+    "shinyhappy": {
+      "description": "Shiny Happy Maya",
+      "catchChance": 0.0007
+    },
+    "shinyrickroll": {
+      "description": "Shiny Rick Roll Maya",
+      "catchChance": 0.0007
+    },
+    "shinynot": {
+      "description": "Shiny Not Maya",
+      "catchChance": 0.0007
+    },
+    "shinystronk": {
+      "description": "Shiny Stronk Maya",
+      "catchChance": 0.0007
+    },
+    "shinyheadpat": {
+      "description": "Shiny Head Pat Maya",
+      "catchChance": 0.0007
+    },
+    "shinyselfie": {
+      "description": "Shiny Selfie Maya",
+      "catchChance": 0.0007
+    },
+    "shinyconcern": {
+      "description": "Shiny Concern Maya",
+      "catchChance": 0.0007
+    },
+    "shiny8bit": {
+      "description": "Shiny 8bit Maya",
+      "catchChance": 0.0007
+    },
+    "shinydivine": {
+      "description": "Shiny Divine Maya",
+      "catchChance": 0.0007
+    },
+    "shinymilk": {
+      "description": "Shiny Milk box Maya",
+      "catchChance": 0.0007
+    },
+    "shinyguitar": {
+      "description": "Shiny Pro guitar player Maya",
+      "catchChance": 0.0007
+    },
+    "shinyblanky": {
+      "description": "Shiny Blanky Maya",
+      "catchChance": 0.0007
+    },
+    "shinybad": {
+      "description": "Shiny Bad to the BONE Maya",
+      "catchChance": 0.0007
+    },
+    "shinypuppy": {
+      "description": "Shiny Puppy Maya",
+      "catchChance": 0.0001
+    },
+    "cursedgood": {
+      "description": "Cursed Good Maya",
+      "catchChance": 0.0009
+    },
+    "cursedsleepy": {
+      "description": "Cursed Sleepy Maya",
+      "catchChance": 0.0009
+    },
+    "cursedexcite": {
+      "description": "Cursed Excite Maya",
+      "catchChance": 0.0009
+    },
+    "cursedhappy": {
+      "description": "Cursed Happy Maya",
+      "catchChance": 0.0009
+    },
+    "cursedrickroll": {
+      "description": "Cursed Rick Roll Maya",
+      "catchChance": 0.0009
+    },
+    "cursednot": {
+      "description": "Cursed Not Maya",
+      "catchChance": 0.0009
+    },
+    "cursedstronk": {
+      "description": "Cursed Stronk Maya",
+      "catchChance": 0.0009
+    },
+    "cursedheadpat": {
+      "description": "Cursed Head Pat Maya",
+      "catchChance": 0.0009
+    },
+    "cursedselfie": {
+      "description": "Cursed Selfie Maya",
+      "catchChance": 0.0009
+    },
+    "cursedconcern": {
+      "description": "Cursed Concern Maya",
+      "catchChance": 0.0009
+    },
+    "cursed8bit": {
+      "description": "Cursed 8bit Maya",
+      "catchChance": 0.0009
+    },
+    "curseddivine": {
+      "description": "Cursed Divine Maya",
+      "catchChance": 0.0009
+    },
+    "cursedmilk": {
+      "description": "Cursed Milk box Maya",
+      "catchChance": 0.0009
+    },
+    "cursedguitar": {
+      "description": "Cursed Pro guitar player Maya",
+      "catchChance": 0.0009
+    },
+    "cursedblanky": {
+      "description": "Cursed Blanky Maya",
+      "catchChance": 0.0009
+    },
+    "cursedbad": {
+      "description": "Cursed Bad to the BONE Maya",
+      "catchChance": 0.0009
+    },
+    "cursedpuppy": {
+      "description": "Cursed Puppy Maya",
+      "catchChance": 0.0002
+    }
+
+
+  }
