@@ -16,7 +16,7 @@ module.exports = {
     .setName('achievements')
     .setDescription('Displays your achievements.'),
   async execute(interaction) {
-    await interaction.deferReply(); // Defer the reply to give more time for processing
+    await interaction.deferReply({ ephemeral: true });
 
     const userId = interaction.user.id;
     // Retrieve the user's achievements from the database
@@ -55,15 +55,13 @@ module.exports = {
         embed.addFields({ name: achievementName, value: description, inline: true });
       }
     }
-
-    await interaction.editReply({ embeds: [embed] });
-
-    // Handle achievements after sending the initial response
     const achievementEmbeds = await handleAchievements(userId, { type: 'maya', mayaName: 'nothingtoseehere' }, 'achievements');
 
-    // Send achievement embeds as follow-up messages
     for (const achievementEmbed of achievementEmbeds) {
-      await interaction.followUp({ embeds: [achievementEmbed] });
+      await interaction.channel.send({ embeds: [achievementEmbed] });
     }
+
+    await interaction.editReply({ embeds: [embed] })
+    
   },
 };

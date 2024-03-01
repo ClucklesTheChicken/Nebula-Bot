@@ -11,8 +11,8 @@ const { EmbedBuilder } = require('discord.js');
 const generateImage = require("./generateImage");
 const { createEmbed, updateInventory, handleAchievements, addNewUser } = require('./functions.js');
 
-//const MAYA_CHANNEL_ID = '1208747548685107281'; // maya channel
-const MAYA_CHANNEL_ID = '1202316000725307463'; // bots testing channel
+const MAYA_CHANNEL_ID = '1208747548685107281'; // maya channel
+//const MAYA_CHANNEL_ID = '1202316000725307463'; // bots testing channel
 
 const mayasData = require('./mayas.json'); 
 const achievementsData = require('./achievements.json');
@@ -170,8 +170,8 @@ function spawnMayas() {
     }, 3 * 60000);
 
     spawnMayas(); // Schedule the next Maya spawn
-  //}, interval * 60000); // Convert minutes to milliseconds
-  }, 30000);
+  }, interval * 60000); // Convert minutes to milliseconds
+  //}, 30000);
 }
 
 client.on('messageCreate', async (message) => {
