@@ -28,7 +28,7 @@ module.exports = {
     // Calculate the total achievements possible
     const totalAchievements = Object.keys(achievementsData.count).length +
                               Object.keys(achievementsData.first).length +
-                              Object.keys(achievementsData.misc).length;
+                              Object.keys(achievementsData.misc).length -1;
 
     // Count the user's achievements
     const userAchievementsCount = Object.values(userAchievements).filter(value => value).length;

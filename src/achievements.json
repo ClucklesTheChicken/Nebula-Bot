@@ -60,6 +60,9 @@
     },
     "polite": {
       "description": "Used the hey command for the first time! Everyone always asks WHERE'S NEBULA BOT... Never how's Nebula bot :("
+    },
+    "thefirstcatch": {
+      "description": "This user caught the VERY FIRST MAYA!"
     }
   },
   "misc": {
