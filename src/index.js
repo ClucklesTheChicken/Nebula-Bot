@@ -20,7 +20,7 @@ const mayaFolder = path.resolve( __dirname, "../mayas" );
 // Database connection configuration
 const dbConfig = {
     host: process.env.HOST,
-    user: process.env.USER,
+    user: process.env.MYSQLUSER,
     password: process.env.PASS,
     database: process.env.DATABASE,
     port: 3306
