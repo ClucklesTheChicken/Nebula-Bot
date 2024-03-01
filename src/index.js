@@ -9,6 +9,8 @@ const { Routes } = require("discord-api-types/v9");
 const { Player } = require("discord-player");
 const { EmbedBuilder } = require('discord.js');
 const generateImage = require("./generateImage");
+const { createEmbed, updateInventory, handleAchievements, addNewUser } = require('./functions.js');
+
 //const MAYA_CHANNEL_ID = '1208747548685107281'; // maya channel
 const MAYA_CHANNEL_ID = '1202316000725307463'; // bots testing channel
 
@@ -134,12 +136,10 @@ function getRandomMaya() {
 }
 
 function spawnMayas() {
-  const interval = Math.random() * (40 - 30) + 30; // 30 -40 minute spawn
+  const interval = Math.random() * (40 - 25) + 25; // 25 -40 minute spawn
   setTimeout(async () => {
     const selectedMaya = getRandomMaya();
-    // Post the selected Maya image and description to the channel
-    // For example:
-    activeMayaSpawnTime = Date.now(); // Record the spawn time
+    
     const embed = createEmbed(
       `A ${selectedMaya.description} has appeared!`,
       `Get ready to catch her!`,
@@ -153,6 +153,8 @@ function spawnMayas() {
       activeMayaMessage.delete().catch(console.error);
     }
     const message = await client.channels.cache.get(MAYA_CHANNEL_ID).send({ embeds: [embed], files: [attachment] });
+    activeMayaSpawnTime = Date.now(); // Record the spawn time
+
     activeMayaMessage = message;
 
     // Store information about the spawned Maya in activeMaya
@@ -169,7 +171,7 @@ function spawnMayas() {
 
     spawnMayas(); // Schedule the next Maya spawn
   //}, interval * 60000); // Convert minutes to milliseconds
-  }, 20000);
+  }, 30000);
 }
 
 client.on('messageCreate', async (message) => {
@@ -244,154 +246,6 @@ client.on('messageCreate', async (message) => {
     message.delete().catch(console.error);
   }
 });
-
-function createEmbed(title, description, color, thumbnail = null, fields = null) {
-  const embed = new EmbedBuilder()
-    .setTitle(title)
-    .setDescription(description)
-    .setColor(color);
-
-  if (thumbnail) {
-    embed.setThumbnail(thumbnail);
-  }
-
-  if (fields && Array.isArray(fields)) {
-    fields.forEach(field => {
-      if (field.name && field.value) {
-        embed.addFields({ name: field.name, value: field.value, inline: field.inline || false });
-      }
-    });
-  }
-
-  return embed;
-}
-
-async function addNewUser(userid) {
-  const connection = await mysql.createConnection(dbConfig);
-  const currentDate = new Date().toISOString().slice(0, 19).replace('T', ' '); // Format the current date and time in MySQL DATETIME format
-  await connection.execute('INSERT INTO achievements (userid, achievements, inventory, fastest, date_created) VALUES (?, NULL, NULL, NULL, ?)', [userid, currentDate]);
-  await connection.end();
-}
-
-async function updateInventory(userid, mayaName, catchTime) {
-  const connection = await mysql.createConnection(dbConfig);
-  const [rows] = await connection.execute('SELECT * FROM achievements WHERE userid = ?', [userid]);
-
-  if (rows.length > 0) {
-    let inventory = rows[0].inventory ? JSON.parse(rows[0].inventory) : {};
-    inventory[mayaName] = (inventory[mayaName] || 0) + 1;
-
-    // Update the fastest time if the current catch is faster
-    let fastest = rows[0].fastest;
-    if (fastest === null || catchTime < fastest) {
-      fastest = catchTime;
-    }
-
-    await connection.execute('UPDATE achievements SET inventory = ?, fastest = ? WHERE userid = ?', [JSON.stringify(inventory), fastest, userid]);
-  } else {
-    // If the user does not exist, add a new user with the current catch time as the fastest
-    await addNewUser(userid);
-    await connection.execute('UPDATE achievements SET inventory = ?, fastest = ? WHERE userid = ?', [JSON.stringify({ [mayaName]: 1 }), catchTime, userid]);
-  }
-
-  await connection.end();
-}
-
-async function handleAchievements(userid, eventData, forceAchieve = false) {
-  const connection = await mysql.createConnection(dbConfig);
-  const [rows] = await connection.execute('SELECT * FROM achievements WHERE userid = ?', [userid]);
-      
-  let achievements = rows.length > 0 && rows[0].achievements ? JSON.parse(rows[0].achievements) : {};
-  let inventory = rows.length > 0 && rows[0].inventory ? JSON.parse(rows[0].inventory) : {};
-
-  const embeds = [];
-  let updated = false;
-  if(forceAchieve == false){
-    // Check count achievements
-    for (const [name, data] of Object.entries(achievementsData.count)) {
-      const totalMayasCaught = Object.values(inventory).reduce((acc, val) => acc + val, 0) +1;
-      if (totalMayasCaught >= data.requirement && !(name in achievements)) {
-        achievements[name] = true;
-        updated = true;
-        embeds.push(createEmbed(`${name} Achievement Unlocked!`, `<@${userid}> ${data.description}`, '#FF5733'));
-      }
-    }
-
-    // Check first achievements
-    for (const [name, data] of Object.entries(achievementsData.first)) {
-      if (!(name in achievements)) {
-        if (data.hasOwnProperty('requirement')) {
-          if (eventData.type === 'maya' && eventData.mayaName.includes(data.requirement)) {
-            achievements[name] = true;
-            updated = true;
-            embeds.push(createEmbed(`${name} Achievement Unlocked!`, `<@${userid}> ${data.description}`, '#FF5733'));
-          }
-        }
-      }
-    }
-
-    // Check catchall
-    if (!('catchall' in achievements)) {
-      if (Object.keys(mayasData).every(maya => maya in inventory)) {
-        achievements['catchall'] = true;
-        updated = true;
-        embeds.push(createEmbed(`catchall Achievement Unlocked!`, `<@${userid}> ${achievementsData.misc.catchall.description}`, '#FF5733'));
-      }
-    }
-  }
-  else{
-    let achievementSection = null;
-    let achievementData = null;
-
-    // Determine which section the achievement belongs to
-    if (forceAchieve in achievementsData.count) {
-      achievementSection = 'count';
-    } else if (forceAchieve in achievementsData.first) {
-      achievementSection = 'first';
-    } else if (forceAchieve in achievementsData.misc) {
-      achievementSection = 'misc';
-    }
-
-    // Get the achievement data
-    if (achievementSection) {
-      achievementData = achievementsData[achievementSection][forceAchieve];
-    }
-
-    if(forceAchieve == 'mayadonator'){
-      if(eventData.mayaName.includes('ultimate') && achievements['R I C H'] !== true){
-        if('R I C H' in achievements){
-          if(achievements['R I C H'] >= 4){
-            achievements['R I C H'] = true;
-            updated = true;
-            embeds.push(createEmbed(`R I C H Achievement Unlocked!`, `<@${userid}> Donated 5 ultimate Mayas to the bot! THENKS`, '#FF5733'));
-          }
-          else{
-            achievements['R I C H'] = achievements['R I C H'] + 1;
-          }
-        }
-        else{
-          achievements['R I C H'] = 1;
-          updated = true;
-        }
-      }
-    }
-
-    // Add the achievement if it doesn't exist
-    if (achievementData && !(forceAchieve in achievements)) {
-      achievements[forceAchieve] = true;
-      updated = true;
-      embeds.push(createEmbed(`${forceAchieve} Achievement Unlocked!`, `<@${userid}> ${achievementData.description}`, '#FF5733'));
-    }
-  }
-  
-
-  if (updated) {
-    await connection.execute('UPDATE achievements SET achievements = ? WHERE userid = ?', [JSON.stringify(achievements), userid]);
-  }
-  
-  await connection.end();
-  return embeds;
-}
 
 
 client.login(process.env.TOKEN);
