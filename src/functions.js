@@ -63,6 +63,12 @@ async function updateInventory(userid, mayaName, catchTime) {
 async function handleAchievements(userid, eventData, forceAchieve = false) {
   const connection = await mysql.createConnection(dbConfig);
   const [rows] = await connection.execute('SELECT * FROM achievements WHERE userid = ?', [userid]);
+
+
+    if (rows.length === 0) {
+      // User does not exist, add a new user to the achievements table
+      await addNewUser(userid);
+    }
       
   let achievements = rows.length > 0 && rows[0].achievements ? JSON.parse(rows[0].achievements) : {};
   let inventory = rows.length > 0 && rows[0].inventory ? JSON.parse(rows[0].inventory) : {};
