@@ -166,5 +166,6 @@ async function addNewUser(userid) {
 module.exports = {
   createEmbed,
   updateInventory,
-  handleAchievements
+  handleAchievements,
+  addNewUser
 };
