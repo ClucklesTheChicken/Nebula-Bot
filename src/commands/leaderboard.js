@@ -34,7 +34,7 @@ async function getFastestCatchesLeaderboard(client) {
   async function getSlowestCatchesLeaderboard(client) {
       const connection = await mysql.createConnection(dbConfig);
       const [rows] = await connection.execute(
-        'SELECT userid, fastest FROM achievements WHERE fastest IS NOT NULL ORDER BY fastest DESC LIMIT 15'
+        'SELECT userid, slowest FROM achievements WHERE slowest IS NOT NULL ORDER BY slowest DESC LIMIT 15'
       );
       await connection.end();
       
