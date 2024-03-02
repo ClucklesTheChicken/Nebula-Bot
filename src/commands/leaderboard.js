@@ -40,11 +40,11 @@ async function getFastestCatchesLeaderboard(client) {
       
       // Fetch the user's name using the Discord API
       const leaderboardRows = await Promise.all(rows.map(async row => {
-        const roundedFastest = Math.ceil(row.fastest * 1000) / 1000; // Round up to 3 decimal points
+        const roundesSlowest = Math.ceil(row.slowest * 1000) / 1000; // Round up to 3 decimal points
         const user = await client.users.fetch(row.userid);
         return {
           name: user.username,
-          fastest: roundedFastest.toFixed(3)
+          fastest: roundesSlowest.toFixed(3)
         };
       }));
   
