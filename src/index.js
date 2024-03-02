@@ -200,7 +200,7 @@ function spawnMayas() {
     activeMaya = selectedMaya;
 
     // Chance to spawn a fake Maya with a different interval
-    if (Math.random() < 0.05) {
+    if (Math.random() < 0.15) {
     //if (true) {
       const fakeInterval = Math.random() * (35 - 24) + 24; // 20 - 35 minute spawn for the fake Maya
       setTimeout(async () => {
