@@ -46,15 +46,19 @@ async function updateInventory(userid, mayaName, catchTime) {
   
       // Update the fastest time if the current catch is faster
       let fastest = rows[0].fastest;
+      let slowest = rows[0].slowest;
       if (fastest === null || catchTime < fastest) {
         fastest = catchTime;
       }
+      if (slowest === null || catchTime > slowest) {
+        slowest = catchTime;
+      }
   
-      await connection.execute('UPDATE achievements SET inventory = ?, fastest = ? WHERE userid = ?', [JSON.stringify(inventory), fastest, userid]);
+      await connection.execute('UPDATE achievements SET inventory = ?, fastest = ?, slowest = ? WHERE userid = ?', [JSON.stringify(inventory), fastest, slowest, userid]);
     } else {
       // If the user does not exist, add a new user with the current catch time as the fastest
       await addNewUser(userid);
-      await connection.execute('UPDATE achievements SET inventory = ?, fastest = ? WHERE userid = ?', [JSON.stringify({ [mayaName]: 1 }), catchTime, userid]);
+      await connection.execute('UPDATE achievements SET inventory = ?, fastest = ?, slowest = ? WHERE userid = ?', [JSON.stringify({ [mayaName]: 1 }), catchTime, catchTime, userid]);
     }
   
     await connection.end();
