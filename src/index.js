@@ -34,6 +34,7 @@ const GUILD_ID = process.env.GUILD_ID;
 let activeMaya = null;
 let activeMayaMessage = null;
 let activeMayaSpawnTime = null;
+let activeFakeMayaMessage = null;
 
 const client = new Client({
   intents: [
@@ -178,7 +179,6 @@ function spawnMayas() {
   const interval = Math.random() * (40 - 25) + 25; // 25 -40 minute spawn
   setTimeout(async () => {
     const selectedMaya = getRandomMaya();
-    
     const embed = createEmbed(
       `A ${selectedMaya.description} has appeared!`,
       `Get ready to catch her!`,
@@ -199,6 +199,33 @@ function spawnMayas() {
     // Store information about the spawned Maya in activeMaya
     activeMaya = selectedMaya;
 
+    // Chance to spawn a fake Maya with a different interval
+    if (Math.random() < 0.05) {
+    //if (true) {
+      const fakeInterval = Math.random() * (35 - 24) + 24; // 20 - 35 minute spawn for the fake Maya
+      setTimeout(async () => {
+        const fakeEmbed = createEmbed(
+          `A Fake Maya has appeared!`,
+          `Get ready to catch her!`,
+          '#FF5733'
+        );
+        const fakeAttachment = new AttachmentBuilder(`${mayaFolder}/fake.gif`, { name: 'fake.gif' });
+        fakeEmbed.setImage('attachment://fake.gif');
+
+        const fakeMessage = await client.channels.cache.get(MAYA_CHANNEL_ID).send({ embeds: [fakeEmbed], files: [fakeAttachment] });
+        activeFakeMayaMessage = fakeMessage;
+
+        // Set a timeout to make the fake Maya disappear after 3 minutes
+        setTimeout(() => {
+          if (activeFakeMayaMessage) {
+            activeFakeMayaMessage.delete().catch(console.error);
+            activeFakeMayaMessage = null;
+          }
+        }, 1 * 60000);
+      }, fakeInterval * 60000); // Convert minutes to milliseconds for the fake Maya
+      //}, 8000);
+    }
+
     // Set a timeout to make Maya disappear after 3 minutes
     setTimeout(() => {
       if (activeMayaMessage) {
@@ -210,7 +237,7 @@ function spawnMayas() {
 
     spawnMayas(); // Schedule the next Maya spawn
   }, interval * 60000); // Convert minutes to milliseconds
-  //}, 30000);
+  //}, 20000);
 }
 
 client.on('messageCreate', async (message) => {
@@ -264,10 +291,26 @@ client.on('messageCreate', async (message) => {
         activeMayaMessage.delete().catch(console.error);
         activeMayaMessage = null;
       }
-
+      message.delete().catch(console.error);
       await connection.end();
     }
-    message.delete().catch(console.error);
+    else if (activeFakeMayaMessage) {
+      // User tried to catch the fake Maya
+      activeFakeMayaMessage.delete().catch(console.error);
+      activeFakeMayaMessage = null;
+      message.react('<:cluckleslaugh:1161291084043919483>'); // Use the full emoji format
+      message.channel.send(`<@${message.author.id}> GOT JUKED by a fake Maya! Let's all point and laugh`);
+      const achievementEmbeds = await handleAchievements(message.author.id, { type: 'maya', mayaName: 'nothingtoseehere' }, 'getjuked');
+
+      for (const embed of achievementEmbeds) {
+        message.channel.send({ embeds: [embed] });
+      }
+
+    }
+    else{
+      message.delete().catch(console.error);
+    }
+    
     
   }
   else if(message.channel.id === MAYA_CHANNEL_ID && message.content.toLowerCase() === 'cat'){
