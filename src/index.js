@@ -14,7 +14,8 @@ const { createEmbed, updateInventory, handleAchievements, addNewUser } = require
 const MAYA_CHANNEL_ID = '1208747548685107281'; // maya channel
 //const MAYA_CHANNEL_ID = '1202316000725307463'; // bots testing channel
 
-const mayasData = require('./mayas.json'); 
+const mayasData = require('./mayas.json');
+const leaderboard = require('./commands/leaderboard.js');
 const achievementsData = require('./achievements.json');
 const mysql = require('mysql2/promise');
 const mayaFolder = path.resolve( __dirname, "../mayas" );
@@ -99,17 +100,55 @@ function goTime() {
 
   client.on("interactionCreate", (interaction) => {
     async function handleCommand() {
-      if (!interaction.isCommand()) return
-
-      const slashcmd = client.slashcommands.get(interaction.commandName)
-      if (!slashcmd) interaction.reply("Sorry, there were some technical difficulties. Please ask your nearest Cluckles for a hug.")
-
-      try {
-        await slashcmd.execute(interaction, client);
-      } catch (error) {
-        console.error(error);
-        await interaction.reply({ content: 'Sorry, there were some technical difficulties. Please ask your nearest Cluckles for a hug.', ephemeral: true });
+      if (interaction.isButton()) {
+        if (interaction.customId === 'fastest_catches_leaderboard') {
+          const fastestRows = await leaderboard.getFastestCatchesLeaderboard(interaction.client);
+          const fastestEmbed = new EmbedBuilder()
+            .setTitle('Leaderboards - Fastest Times')
+            .setDescription('Top users with the fastest times:')
+            .setColor('#FF5733');
+          fastestRows.forEach((row, index) => {
+            fastestEmbed.addFields({ name: `${index + 1}. ${row.name}`, value: `Time: ${row.fastest}`, inline: false });
+          });
+          await interaction.update({ embeds: [fastestEmbed] });
+        }
+        else if (interaction.customId === 'slowest_catches_leaderboard') {
+            const slowestRows = await leaderboard.getSlowestCatchesLeaderboard(interaction.client); // Corrected function name
+            const slowestEmbed = new EmbedBuilder()
+                .setTitle('Leaderboards - Slowest Catches') // Changed to "Catches"
+                .setDescription('Top users with the slowest catches:') // Changed to "catches"
+                .setColor('#FF5733');
+            slowestRows.forEach((row, index) => {
+                slowestEmbed.addFields({ name: `${index + 1}. ${row.name}`, value: `Time: ${row.fastest}`, inline: false });
+            });
+            await interaction.update({ embeds: [slowestEmbed] });
+        }
+         else if (interaction.customId === 'most_mayas_leaderboard') {
+          const mostMayasRows = await leaderboard.getMostMayasLeaderboard(interaction.client);
+          const mostMayasEmbed = new EmbedBuilder()
+            .setTitle('Leaderboards - Most Mayas')
+            .setDescription('Top users with the most Mayas:')
+            .setColor('#FF5733');
+          mostMayasRows.forEach((row, index) => {
+            mostMayasEmbed.addFields({ name: `${index + 1}. User ${row.name}`, value: `Mayas: ${row.maya_count}`, inline: false });
+          });
+          await interaction.update({ embeds: [mostMayasEmbed] });
+        }
       }
+      else if (interaction.isCommand()){
+        const slashcmd = client.slashcommands.get(interaction.commandName)
+        if (!slashcmd) interaction.reply("Sorry, there were some technical difficulties. Please ask your nearest Cluckles for a hug.")
+  
+        try {
+          await slashcmd.execute(interaction, client);
+        } catch (error) {
+          console.error(error);
+          await interaction.reply({ content: 'Sorry, there were some technical difficulties. Please ask your nearest Cluckles for a hug.', ephemeral: true });
+        }
+      }
+      else{
+        return;
+      }      
     }
     handleCommand();
   })
