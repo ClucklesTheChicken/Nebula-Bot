@@ -135,6 +135,17 @@ function goTime() {
           });
           await interaction.update({ embeds: [mostMayasEmbed] });
         }
+        else if (interaction.customId === 'most_types_mayas_leaderboard') {
+          const mostMayasRows = await leaderboard.getMostTypesMayasLeaderboard(interaction.client);
+          const mostMayasEmbed = new EmbedBuilder()
+            .setTitle('Leaderboards - Most Types of Mayas')
+            .setDescription('Top users with the most types of Mayas:')
+            .setColor('#FF5733');
+          mostMayasRows.forEach((row, index) => {
+            mostMayasEmbed.addFields({ name: `${index + 1}. User ${row.name}`, value: `Mayas types: ${row.maya_count}`, inline: false });
+          });
+          await interaction.update({ embeds: [mostMayasEmbed] });
+        }
       }
       else if (interaction.isCommand()){
         const slashcmd = client.slashcommands.get(interaction.commandName)

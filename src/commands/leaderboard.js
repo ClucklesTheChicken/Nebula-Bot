@@ -52,7 +52,7 @@ async function getFastestCatchesLeaderboard(client) {
   }
   
   // Function to get the most Mayas leaderboard
-  async function getMostMayasLeaderboard(client) {
+  async function getMostTypesMayasLeaderboard(client) {
     const connection = await mysql.createConnection(dbConfig);
     const [rows] = await connection.execute(
       'SELECT userid, JSON_LENGTH(inventory) AS maya_count FROM achievements ORDER BY maya_count DESC LIMIT 15'
@@ -70,6 +70,38 @@ async function getFastestCatchesLeaderboard(client) {
   
     return leaderboardRows;
   }
+
+  async function getMostMayasLeaderboard(client) {
+    const connection = await mysql.createConnection(dbConfig);
+    const [rows] = await connection.execute(
+      'SELECT userid, inventory FROM achievements'
+    );
+    await connection.end();
+
+    // Calculate the total number of Mayas for each user
+    const userMayaCounts = rows.map(row => {
+      const inventory = row.inventory ? JSON.parse(row.inventory) : {};
+      const totalMayas = Object.values(inventory).reduce((acc, count) => acc + count, 0);
+      return {
+        userid: row.userid,
+        maya_count: totalMayas
+      };
+    });
+
+    // Sort the users by their total Maya count in descending order and take the top 15
+    const sortedUserMayaCounts = userMayaCounts.sort((a, b) => b.maya_count - a.maya_count).slice(0, 15);
+
+    // Fetch the user's name using the Discord API
+    const leaderboardRows = await Promise.all(sortedUserMayaCounts.map(async row => {
+      const user = await client.users.fetch(row.userid);
+      return {
+        name: user.username,
+        maya_count: row.maya_count
+      };
+    }));
+
+    return leaderboardRows;
+}
 
 
 
@@ -105,6 +137,10 @@ module.exports = {
             new ButtonBuilder()
             .setCustomId('most_mayas_leaderboard')
             .setLabel('Most Mayas')
+            .setStyle(ButtonStyle.Primary),
+            new ButtonBuilder()
+            .setCustomId('most_types_mayas_leaderboard')
+            .setLabel('Most Maya Types')
             .setStyle(ButtonStyle.Primary)
         );
   
@@ -112,5 +148,6 @@ module.exports = {
     },
     getFastestCatchesLeaderboard,
     getMostMayasLeaderboard,
-    getSlowestCatchesLeaderboard
+    getSlowestCatchesLeaderboard,
+    getMostTypesMayasLeaderboard
   };
