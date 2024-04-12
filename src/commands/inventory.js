@@ -27,7 +27,7 @@ module.exports = {
     await connection.end();
 
     const embed = createEmbed('Inventory', 'Your inventory of Mayas:', '#FF5733');
-    for (const [mayaName, count] of Object.entries(inventoryData)) {
+    for (const [mayaName, count] of Object.entries(inventory)) {
       embed.addFields({ name: mayaName, value: count.toString().substring(0, 25), inline: true });
     }
 
