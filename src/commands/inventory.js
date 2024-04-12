@@ -26,7 +26,7 @@ module.exports = {
     const inventory = rows.length > 0 && rows[0].inventory ? JSON.parse(rows[0].inventory) : {};
     await connection.end();
 
-    const fieldGroups = Object.entries(inventoryData).reduce((groups, item, index) => {
+    const fieldGroups = Object.entries(inventory).reduce((groups, item, index) => {
       const groupIndex = Math.floor(index / 25); // 25 fields per embed
       if (!groups[groupIndex]) groups[groupIndex] = [];
       groups[groupIndex].push({ name: item[0], value: item[1].toString(), inline: true });
