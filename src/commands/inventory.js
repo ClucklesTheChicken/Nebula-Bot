@@ -26,22 +26,30 @@ module.exports = {
     const inventory = rows.length > 0 && rows[0].inventory ? JSON.parse(rows[0].inventory) : {};
     await connection.end();
 
-    const embed = createEmbed('Inventory', 'Your inventory of Mayas:', '#FF5733');
-    for (const [mayaName, count] of Object.entries(inventory)) {
-      embed.addFields({ name: mayaName, value: count.toString().substring(0, 25), inline: true });
+    const fieldGroups = Object.entries(inventoryData).reduce((groups, item, index) => {
+      const groupIndex = Math.floor(index / 25); // 25 fields per embed
+      if (!groups[groupIndex]) groups[groupIndex] = [];
+      groups[groupIndex].push({ name: item[0], value: item[1].toString(), inline: true });
+      return groups;
+    }, []);
+    
+    const embeds = fieldGroups.map((fields, index) => {
+      return createEmbed(`Inventory Page ${index + 1}`, 'Your inventory of Mayas:', '#FF5733', fields);
+    });
+    
+    // Send the first embed initially
+    await interaction.editReply({ embeds: [embeds[0]] });
+    
+    // If there are more embeds, send them as follow-up messages
+    for (let i = 1; i < embeds.length; i++) {
+      await interaction.followUp({ embeds: [embeds[i]] });
     }
 
-    try{
-      // Edit the deferred reply with the inventory embed
-      await interaction.editReply({ embeds: [embed] });
+    const achievementEmbeds = await handleAchievements(userId, { type: 'maya', mayaName: 'nothingtoseehere' }, 'inventory'); // FORCE ACHIEVEMENT
 
-      const achievementEmbeds = await handleAchievements(userId, { type: 'maya', mayaName: 'nothingtoseehere' }, 'inventory');
-      for (const achievementEmbed of achievementEmbeds) {
-        await interaction.followUp({ embeds: [achievementEmbed] });
-      }
-    } catch (error) {
-      console.error('Error handling the command:', error);
-      await interaction.followUp({ content: 'There was an error processing your request.', ephemeral: true });
+    // Send achievement embeds as follow-up messages
+    for (const achievementEmbed of achievementEmbeds) {
+      await interaction.followUp({ embeds: [achievementEmbed] });
     }
   },
 };
