@@ -27,18 +27,21 @@ module.exports = {
     await connection.end();
 
     const embed = createEmbed('Inventory', 'Your inventory of Mayas:', '#FF5733');
-    for (const [mayaName, count] of Object.entries(inventory)) {
-      embed.addFields({ name: mayaName, value: count.toString(), inline: true });
+    for (const [mayaName, count] of Object.entries(inventoryData)) {
+      embed.addFields({ name: mayaName, value: count.toString().substring(0, 25), inline: true });
     }
 
-    const achievementEmbeds = await handleAchievements(userId, { type: 'maya', mayaName: 'nothingtoseehere' }, 'inventory'); // FORCE ACHIEVEMENT
+    try{
+      // Edit the deferred reply with the inventory embed
+      await interaction.editReply({ embeds: [embed] });
 
-    // Edit the deferred reply with the inventory embed
-    await interaction.editReply({ embeds: [embed] });
-
-    // Send achievement embeds as follow-up messages
-    for (const achievementEmbed of achievementEmbeds) {
-      await interaction.followUp({ embeds: [achievementEmbed] });
+      const achievementEmbeds = await handleAchievements(userId, { type: 'maya', mayaName: 'nothingtoseehere' }, 'inventory');
+      for (const achievementEmbed of achievementEmbeds) {
+        await interaction.followUp({ embeds: [achievementEmbed] });
+      }
+    } catch (error) {
+      console.error('Error handling the command:', error);
+      await interaction.followUp({ content: 'There was an error processing your request.', ephemeral: true });
     }
   },
 };
