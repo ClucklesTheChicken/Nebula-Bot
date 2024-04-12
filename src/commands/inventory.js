@@ -27,14 +27,14 @@ module.exports = {
       await connection.end();
 
       const fieldGroups = Object.entries(inventory).reduce((groups, item, index) => {
-        const groupIndex = Math.floor(index / 25); // 25 fields per embed
+        const groupIndex = Math.floor(index / 24); // 25 fields per embed
         if (!groups[groupIndex]) groups[groupIndex] = [];
         groups[groupIndex].push({ name: item[0], value: item[1].toString(), inline: true });
         return groups;
       }, []);
       
       const embeds = fieldGroups.map((fields, index) => {
-        return createEmbed(`Inventory Page ${index + 1}`, 'Your inventory of Mayas:', '#FF5733', fields);
+        return createEmbed(`Inventory Page ${index + 1}`, 'Your inventory of Mayas:', '#FF5733', null, fields);
       });
       
       // Send the first embed initially
