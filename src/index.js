@@ -96,7 +96,7 @@ function goTime() {
     }
     await connection.end();
     console.log(`${c.user.username} is online and ready for BITCHES.`);
-    spawnMayas();
+    //spawnMayas();
   })
 
   client.on("interactionCreate", (interaction) => {
@@ -251,94 +251,94 @@ function spawnMayas() {
   //}, 20000);
 }
 
-client.on('messageCreate', async (message) => {
-  if (message.channel.id === MAYA_CHANNEL_ID && message.content.toLowerCase() === 'maya') {
-    if (activeMaya) {
-       // Remove the active Maya
-      let catchTime = (Date.now() - activeMayaSpawnTime) / 1000; // Calculate the catch time in seconds
-      let activeMayaDescription = activeMaya.description;
-      let activeMayaName = activeMaya.name;
-      let dateNow = new Date();
-      dateNow.toISOString().split('T')[0];
-      activeMaya = null;
+// client.on('messageCreate', async (message) => {
+//   if (message.channel.id === MAYA_CHANNEL_ID && message.content.toLowerCase() === 'maya') {
+//     if (activeMaya) {
+//        // Remove the active Maya
+//       let catchTime = (Date.now() - activeMayaSpawnTime) / 1000; // Calculate the catch time in seconds
+//       let activeMayaDescription = activeMaya.description;
+//       let activeMayaName = activeMaya.name;
+//       let dateNow = new Date();
+//       dateNow.toISOString().split('T')[0];
+//       activeMaya = null;
 
-      let embed;
+//       let embed;
 
-      const connection = await mysql.createConnection(dbConfig);
-      const [rows] = await connection.execute('SELECT * FROM achievements WHERE userid = ?', [message.author.id]);
+//       const connection = await mysql.createConnection(dbConfig);
+//       const [rows] = await connection.execute('SELECT * FROM achievements WHERE userid = ?', [message.author.id]);
 
-      if (rows.length === 0) {
-        // User does not exist, add a new user to the achievements table
-        await addNewUser(message.author.id);
-      }
+//       if (rows.length === 0) {
+//         // User does not exist, add a new user to the achievements table
+//         await addNewUser(message.author.id);
+//       }
 
-      await updateInventory(message.author.id, activeMayaName, catchTime);
+//       await updateInventory(message.author.id, activeMayaName, catchTime);
 
       
-      // Handle achievements
-      const achievementEmbeds = await handleAchievements(message.author.id, { type: 'maya', mayaName: activeMayaName });
-      //handleAchievements(message.author.id, { type: 'maya', mayaName: 'ultimate' }, 'mayadonator'); // FORCE ACHIEVEMENT
-      // Send the embed in a message
-      embed = createEmbed(
-        'Maya Caught!',
-        `<@${message.author.id}> caught a ${activeMayaDescription} in ${catchTime} seconds!`,
-        '#FF5733'
-      );
+//       // Handle achievements
+//       const achievementEmbeds = await handleAchievements(message.author.id, { type: 'maya', mayaName: activeMayaName });
+//       //handleAchievements(message.author.id, { type: 'maya', mayaName: 'ultimate' }, 'mayadonator'); // FORCE ACHIEVEMENT
+//       // Send the embed in a message
+//       embed = createEmbed(
+//         'Maya Caught!',
+//         `<@${message.author.id}> caught a ${activeMayaDescription} in ${catchTime} seconds!`,
+//         '#FF5733'
+//       );
 
-      // Create an attachment from the local image file
-      const attachment = new AttachmentBuilder(`${mayaFolder}/${activeMayaName}.png`, { name: 'maya.png' });
+//       // Create an attachment from the local image file
+//       const attachment = new AttachmentBuilder(`${mayaFolder}/${activeMayaName}.png`, { name: 'maya.png' });
 
-      // Set the image in the embed to the attachment
-      embed.setImage('attachment://maya.png');
+//       // Set the image in the embed to the attachment
+//       embed.setImage('attachment://maya.png');
 
-      message.channel.send({ embeds: [embed], files: [attachment] });
+//       message.channel.send({ embeds: [embed], files: [attachment] });
 
-      // Send the achievement embeds to the chat
-      for (const embed of achievementEmbeds) {
-        message.channel.send({ embeds: [embed] });
-      }
+//       // Send the achievement embeds to the chat
+//       for (const embed of achievementEmbeds) {
+//         message.channel.send({ embeds: [embed] });
+//       }
 
-      if (activeMayaMessage) {
-        activeMayaMessage.delete().catch(console.error);
-        activeMayaMessage = null;
-      }
-      message.delete().catch(console.error);
-      await connection.end();
-    }
-    else if (activeFakeMayaMessage) {
-      // User tried to catch the fake Maya
-      activeFakeMayaMessage.delete().catch(console.error);
-      activeFakeMayaMessage = null;
-      message.react('<:cluckleslaugh:1161291084043919483>'); // Use the full emoji format
-      message.channel.send(`<@${message.author.id}> GOT JUKED by a fake Maya! Let's all point and laugh`);
-      const achievementEmbeds = await handleAchievements(message.author.id, { type: 'maya', mayaName: 'nothingtoseehere' }, 'getjuked');
+//       if (activeMayaMessage) {
+//         activeMayaMessage.delete().catch(console.error);
+//         activeMayaMessage = null;
+//       }
+//       message.delete().catch(console.error);
+//       await connection.end();
+//     }
+//     else if (activeFakeMayaMessage) {
+//       // User tried to catch the fake Maya
+//       activeFakeMayaMessage.delete().catch(console.error);
+//       activeFakeMayaMessage = null;
+//       message.react('<:cluckleslaugh:1161291084043919483>'); // Use the full emoji format
+//       message.channel.send(`<@${message.author.id}> GOT JUKED by a fake Maya! Let's all point and laugh`);
+//       const achievementEmbeds = await handleAchievements(message.author.id, { type: 'maya', mayaName: 'nothingtoseehere' }, 'getjuked');
 
-      for (const embed of achievementEmbeds) {
-        message.channel.send({ embeds: [embed] });
-      }
+//       for (const embed of achievementEmbeds) {
+//         message.channel.send({ embeds: [embed] });
+//       }
 
-    }
-    else{
-      message.delete().catch(console.error);
-    }
+//     }
+//     else{
+//       message.delete().catch(console.error);
+//     }
     
     
-  }
-  else if(message.channel.id === MAYA_CHANNEL_ID && message.content.toLowerCase() === 'cat'){
-    const connection = await mysql.createConnection(dbConfig);
-    const [rows] = await connection.execute('SELECT * FROM achievements WHERE userid = ?', [message.author.id]);
-    if (rows.length === 0) {
-      await addNewUser(message.author.id);
-    }   
-    const achievementEmbeds = await handleAchievements(message.author.id, { type: 'maya', mayaName: 'NADA' }, 'notquite');
+//   }
+//   else if(message.channel.id === MAYA_CHANNEL_ID && message.content.toLowerCase() === 'cat'){
+//     const connection = await mysql.createConnection(dbConfig);
+//     const [rows] = await connection.execute('SELECT * FROM achievements WHERE userid = ?', [message.author.id]);
+//     if (rows.length === 0) {
+//       await addNewUser(message.author.id);
+//     }   
+//     const achievementEmbeds = await handleAchievements(message.author.id, { type: 'maya', mayaName: 'NADA' }, 'notquite');
     
-    for (const embed of achievementEmbeds) {
-      message.channel.send({ embeds: [embed] });
-    }
-    await connection.end();
-    message.delete().catch(console.error);
-  }
-});
+//     for (const embed of achievementEmbeds) {
+//       message.channel.send({ embeds: [embed] });
+//     }
+//     await connection.end();
+//     message.delete().catch(console.error);
+//   }
+// });
 
 
 client.login(process.env.TOKEN);
